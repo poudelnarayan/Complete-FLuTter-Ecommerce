@@ -17,7 +17,7 @@ class FakeProductsRepository {
 
   Future<List<Product>> fetchProductsList() {
     return Future.value(_products);
-  }
+  } 
 
   Stream<List<Product>> watchProductsList() {
     return Stream.value(_products);
