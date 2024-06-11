@@ -20,7 +20,10 @@ class ShoppingCartIcon extends StatelessWidget {
           child: IconButton(
             key: shoppingCartIconKey,
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () => context.pushNamed(AppRoutes.cart.name),
+            onPressed: () => context.goNamed(AppRoutes.cart.name),
+            // goRouter.pushnamed() does not work well with deep link
+            // cause some problem when using redirects and refreshListenable
+            // so we must use context.goNamed() instead
           ),
         ),
         if (cartItemsCount > 0)
