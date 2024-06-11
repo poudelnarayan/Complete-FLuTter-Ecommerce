@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeProductsRepository {
   FakeProductsRepository._();
@@ -17,7 +18,7 @@ class FakeProductsRepository {
 
   Future<List<Product>> fetchProductsList() {
     return Future.value(_products);
-  } 
+  }
 
   Stream<List<Product>> watchProductsList() {
     return Stream.value(_products);
@@ -29,3 +30,7 @@ class FakeProductsRepository {
     });
   }
 }
+
+final productsRepositoryProvider = Provider<FakeProductsRepository>((ref) {
+  return FakeProductsRepository.instance;
+});
