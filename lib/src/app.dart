@@ -8,10 +8,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
       restorationScopeId: 'app',
-      // * The home page of the app
-      routerConfig: goRoute,
       onGenerateTitle: (BuildContext context) => 'My Shop'.hardcoded,
       theme: ThemeData(
         // * Use this to toggle Material 3 (defaults to true since Flutter 3.16)
