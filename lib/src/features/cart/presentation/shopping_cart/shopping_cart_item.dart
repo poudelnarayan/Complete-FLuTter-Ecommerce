@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
-import 'package:ecommerce_app/src/constants/test_products.dart';
+import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
+import 'package:ecommerce_app/src/common_widgets/shimmers.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
@@ -32,22 +33,24 @@ class ShoppingCartItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productRepository = ref.watch(productsRepositoryProvider);
-
-    final product = productRepository.getProductById(item.productId)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(Sizes.p16),
-          child: ShoppingCartItemContents(
-            product: product,
-            item: item,
-            itemIndex: itemIndex,
-            isEditable: isEditable,
+    final productValue = ref.watch(productProvider(item.productId));
+    return AsyncValueWidget<Product?>(
+      value: productValue,
+      dataBuilder: (product) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(Sizes.p16),
+            child: ShoppingCartItemContents(
+              product: product!,
+              item: item,
+              itemIndex: itemIndex,
+              isEditable: isEditable,
+            ),
           ),
         ),
       ),
+      shimmerWidget: shoppingCartShimmer,
     );
   }
 }
@@ -125,3 +128,27 @@ class ShoppingCartItemContents extends StatelessWidget {
     );
   }
 }
+
+const Widget shoppingCartShimmer = Row(
+  mainAxisAlignment: MainAxisAlignment.start,
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    BannerPlaceholder(
+        height: 200, width: 200.0), // Ensure width is also defined
+    SizedBox(width: 10), // Adding spacing between BannerPlaceholder and Column
+    Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TitlePlaceholder(width: 200.0),
+          SizedBox(height: 20),
+          SmallcontentPlaceholder(width: 80),
+          SizedBox(height: 20),
+          SmallcontentPlaceholder(width: 80),
+          // Adding spacing between ContentPlaceholders
+        ],
+      ),
+    ),
+  ],
+);
