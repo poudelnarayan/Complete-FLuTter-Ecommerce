@@ -20,7 +20,7 @@ class ShoppingCartIcon extends StatelessWidget {
           child: IconButton(
             key: shoppingCartIconKey,
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () => context.goNamed(AppRoutes.cart.name),
+            onPressed: () => context.pushNamed(AppRoutes.cart.name),
           ),
         ),
         if (cartItemsCount > 0)
