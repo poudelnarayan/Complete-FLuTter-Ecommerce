@@ -15,7 +15,7 @@ class AccountScreenController extends StateNotifier<AsyncValue<void>> {
   AccountScreenController(this.authRepository)
       : super(const AsyncValue<void>.data(null));
   final FakeAuthRepository authRepository;
-  Future<void> logout() async {
+  Future<void> signOut() async {
     try {
       // set the state to loading
       state = const AsyncValue<void>.loading();
