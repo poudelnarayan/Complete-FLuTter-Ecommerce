@@ -1,3 +1,5 @@
+// Controllers should never depend on the BuildContext or anything to do with UI
+
 import 'package:ecommerce_app/src/features/authentication/data/fake_auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +17,7 @@ class AccountScreenController extends StateNotifier<AsyncValue<void>> {
   AccountScreenController(this.authRepository)
       : super(const AsyncValue<void>.data(null));
   final FakeAuthRepository authRepository;
-  Future<void> signOut() async {
+  Future<bool> signOut() async {
     try {
       // set the state to loading
       state = const AsyncValue<void>.loading();
@@ -23,9 +25,11 @@ class AccountScreenController extends StateNotifier<AsyncValue<void>> {
       await authRepository.signOut();
       // set the state to data (if success)
       state = const AsyncValue<void>.data(null);
+      return true;
     } catch (e, st) {
       // set the state to error (if error)
       state = AsyncValue.error(e, st);
+      return false;
     }
   }
 }

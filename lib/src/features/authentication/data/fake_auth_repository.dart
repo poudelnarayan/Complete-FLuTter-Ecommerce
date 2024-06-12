@@ -22,9 +22,8 @@ class FakeAuthRepository {
 
   Future<void> signOut() async {
     await Future.delayed(const Duration(seconds: 2));
-    throw Exception('Failed to sign out');
     _authState.value = null;
-  } 
+  }
 
   void _createNewUser(String email) {
     _authState.value = AppUser(
