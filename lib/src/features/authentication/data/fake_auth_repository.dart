@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/src/features/authentication/domain/app_user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 
 class FakeAuthRepository {
   Stream<AppUser?> authStateChanges() => Stream.value(null);
