@@ -7,7 +7,10 @@ class FakeAuthRepository {
 
   Stream<AppUser?> authStateChanges() => _authState.stream;
   AppUser? get currentUser => _authState.value;
+
   Future<void> signInWithEmailAndPassword(String email, String password) async {
+    await Future.delayed(const Duration(seconds: 3));
+    throw Exception('Connection failed');
     if (currentUser == null) {
       _createNewUser(email);
     }
@@ -15,6 +18,7 @@ class FakeAuthRepository {
 
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
+    await Future.delayed(const Duration(seconds: 2));
     if (currentUser == null) {
       _createNewUser(email);
     }

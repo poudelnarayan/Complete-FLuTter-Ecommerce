@@ -11,24 +11,23 @@ class EmailPasswordSignInController
   final FakeAuthRepository authRepository;
 
   Future<bool> submit(String email, String password) async {
-    state.copyWith(value: const AsyncValue.loading());
+    state = state.copyWith(value: const AsyncValue.loading());
     final value = await AsyncValue.guard(() => _authenticate(email, password));
-    state.copyWith(value: value);
+    state = state.copyWith(value: value);
     return value.hasError == false;
   }
 
-  Future<void> _authenticate(String email, String password) async {
+  Future<void> _authenticate(String email, String password) {
     switch (state.formType) {
       case EmailPasswordSignInFormType.signIn:
-        await authRepository.signInWithEmailAndPassword(email, password);
-        break;
+        return authRepository.signInWithEmailAndPassword(email, password);
       case EmailPasswordSignInFormType.register:
-        await authRepository.createUserWithEmailAndPassword(email, password);
+        return authRepository.createUserWithEmailAndPassword(email, password);
     }
   }
 
   void updateFormType(EmailPasswordSignInFormType formType) {
-    state.copyWith(formType: formType);
+    state = state.copyWith(formType: formType);
   }
 }
 
@@ -37,7 +36,7 @@ final emailPasswordSignInControllerProvider = StateNotifierProvider.autoDispose
         EmailPasswordSignInFormType>((ref, formType) {
   final authRepository = ref.watch(authRepositoryProvider);
   return EmailPasswordSignInController(
-    formType: formType,
     authRepository: authRepository,
+    formType: formType,
   );
 });
