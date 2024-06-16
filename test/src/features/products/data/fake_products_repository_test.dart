@@ -16,8 +16,8 @@ void main() {
   test('getProductById(100) returns null', () {
     final productRepository = FakeProductsRepository();
     expect(
-      () => productRepository.getProductById('100'),
-      throwsStateError,
+      productRepository.getProductById('100'),
+      null,
     );
   });
 }

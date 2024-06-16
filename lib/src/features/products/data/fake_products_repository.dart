@@ -12,7 +12,7 @@ class FakeProductsRepository {
   }
 
   Product? getProductById(String id) {
-    return _products.firstWhere((product) => product.id == id);
+    return _getProduct(_products, id);
   }
 
   Future<List<Product>> fetchProductsList() async {
@@ -28,8 +28,16 @@ class FakeProductsRepository {
 
   Stream<Product?> watchProductById(String id) {
     return watchProductsList().map((products) {
-      return products.firstWhere((product) => product.id == id);
+      return _getProduct(products, id);
     });
+  }
+
+  static Product? _getProduct(List<Product> products, String id) {
+    try {
+      return products.firstWhere((product) => product.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 }
 
