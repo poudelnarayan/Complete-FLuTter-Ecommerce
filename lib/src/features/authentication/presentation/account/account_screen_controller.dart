@@ -15,11 +15,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AccountScreenController extends StateNotifier<AsyncValue<void>> {
   /// StateNotifier always needs an initial value , this needs to be set with the constructor using super()
   AccountScreenController(this.authRepository)
-      : super(const AsyncValue<void>.data(null));
+      : super(const AsyncData(null));
   final FakeAuthRepository authRepository;
 
   Future<void> signOut() async {
-    state = const AsyncValue<void>.loading();
+    state = const AsyncLoading();
     state = await AsyncValue.guard(() => authRepository.signOut());
   }
 }

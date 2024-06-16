@@ -8,7 +8,7 @@ void main() {
     test('initial state is AsyncValue.data', () {
       final authRepository = FakeAuthRepository();
       final controller = AccountScreenController(authRepository);
-      expect(controller.state, const AsyncValue<void>.data(null));
+      expect(controller.state, const AsyncData(null));
     });
   });
 }
