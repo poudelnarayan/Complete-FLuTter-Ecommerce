@@ -7,19 +7,20 @@ import 'package:mocktail/mocktail.dart';
 class MockAuthRepository extends Mock implements FakeAuthRepository {}
 
 void main() {
+  late MockAuthRepository authRepository;
+  late AccountScreenController controller;
+  setUp(() {
+    authRepository = MockAuthRepository();
+    controller = AccountScreenController(authRepository);
+  });
   group('AccountScreenController', () {
     test('initial state is AsyncValue.data', () {
-      final authRepository = MockAuthRepository();
-      final controller = AccountScreenController(authRepository);
       expect(controller.state, const AsyncData<void>(null));
     });
 
     test(
       'singnOut success',
       () async {
-        // Setup Mocks:
-        final authRepository = MockAuthRepository();
-        final controller = AccountScreenController(authRepository);
         // Define Behavior:
         when(authRepository.signOut).thenAnswer((_) => Future.value());
         // as this uses a stream , we need to listen to the stream to get the state changes before performing the action
@@ -41,9 +42,6 @@ void main() {
     test(
       'singnOut Failure',
       () async {
-        // Setup Mocks:
-        final authRepository = MockAuthRepository();
-        final controller = AccountScreenController(authRepository);
         final exception = Exception('Connection failed');
         // Define Behavior:
         when(authRepository.signOut).thenThrow(exception);
