@@ -1,3 +1,7 @@
+// ignore: library_annotations
+@Timeout(Duration(seconds: 5))
+// All the test in this file will now use this timeout(unless we override it)
+
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_controller.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,9 +58,6 @@ void main() {
         // verify
         expect(result, true);
       },
-      timeout: const Timeout(
-        Duration(seconds: 5),
-      ),
     );
 
     test(
@@ -103,9 +104,6 @@ void main() {
         // verify
         expect(result, false);
       },
-      timeout: const Timeout(
-        Duration(seconds: 5),
-      ),
     );
 
     test(
@@ -152,9 +150,6 @@ void main() {
         // verify
         expect(result, true);
       },
-      timeout: const Timeout(
-        Duration(seconds: 5),
-      ),
     );
 
     test(
@@ -201,9 +196,6 @@ void main() {
         // verify
         expect(result, false);
       },
-      timeout: const Timeout(
-        Duration(seconds: 5),
-      ),
     );
   });
 
@@ -243,11 +235,12 @@ void main() {
       controller.updateFormType(EmailPasswordSignInFormType.signIn);
 
       expect(
-          controller.state,
-          EmailPasswordSignInState(
-            formType: EmailPasswordSignInFormType.signIn,
-            value: const AsyncValue.data(null),
-          ));
+        controller.state,
+        EmailPasswordSignInState(
+          formType: EmailPasswordSignInFormType.signIn,
+          value: const AsyncValue.data(null),
+        ),
+      );
     });
   });
 }

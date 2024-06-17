@@ -1,3 +1,7 @@
+// ignore: library_annotations
+@Timeout(Duration(seconds: 5))
+// All the test in this file will now use this timeout(unless we override it)
+
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,7 +39,6 @@ void main() {
         // Assertions:
         verify(authRepository.signOut).called(1);
       },
-      timeout: const Timeout(Duration(seconds: 5)),
     );
 
     test(
@@ -60,7 +63,6 @@ void main() {
         // Assertions:
         verify(authRepository.signOut).called(1);
       },
-      timeout: const Timeout(Duration(seconds: 5)),
     );
   });
 }
