@@ -1,7 +1,9 @@
+import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/features/authentication/presentation/account/account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthRobot {
   AuthRobot(this.tester);
@@ -9,22 +11,30 @@ class AuthRobot {
 
   Future<void> pumpAccountScreen() async {
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: AccountScreen(),
+      ProviderScope(
+        child: MaterialApp.router(
+          routerConfig: GoRouter(initialLocation: '/', routes: [
+            GoRoute(
+              path: '/',
+              builder: (context, state) => const AccountScreen(),
+            ),
+          ]),
         ),
       ),
     );
+    await tester
+        .pumpAndSettle(); // Ensure everything is settled after the widget is pumped
   }
 
   Future<void> tapLogoutButton() async {
     final logoutButton = find.text('Logout');
     expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
-    await tester.pump();
+    await tester
+        .pumpAndSettle(); // Ensure the tap is registered and any resulting UI changes settle
   }
 
-  void expectLofoutDialogFound() {
+  void expectLogoutDialogFound() {
     final dialogTitle = find.text('Are you sure?');
     expect(dialogTitle, findsOneWidget);
   }
@@ -33,11 +43,20 @@ class AuthRobot {
     final cancelButton = find.text('Cancel');
     expect(cancelButton, findsOneWidget);
     await tester.tap(cancelButton);
-    await tester.pump();
+    await tester
+        .pumpAndSettle(); // Ensure the dialog is dismissed and UI settles
   }
 
   void expectLogoutDialogNotFound() {
     final dialogTitle = find.text('Are you sure?');
     expect(dialogTitle, findsNothing);
+  }
+
+  Future<void> tapDialogLogoutButton() async {
+    final logoutButton = find.byKey(kDialogDefaultKey);
+    expect(logoutButton, findsOneWidget);
+    await tester.tap(logoutButton);
+    await tester
+        .pumpAndSettle(); // Ensure the dialog is dismissed and UI settles
   }
 }
