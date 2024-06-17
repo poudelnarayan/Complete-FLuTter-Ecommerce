@@ -6,9 +6,9 @@ import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeProductsRepository {
-  FakeProductsRepository({this.addDelay = false});
+  FakeProductsRepository({this.addDelay = true});
   final bool addDelay;
- 
+
   final List<Product> _products = kTestProducts;
 
   List<Product> getProductList() {
