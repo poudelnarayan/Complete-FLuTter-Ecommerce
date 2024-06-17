@@ -14,32 +14,56 @@ void main() {
       expect(controller.state, const AsyncData<void>(null));
     });
 
-    test('singnOut success', () async {
-      // Setup Mocks:
-      final authRepository = MockAuthRepository();
-      final controller = AccountScreenController(authRepository);
-      // Define Behavior:
-      when(authRepository.signOut).thenAnswer((_) => Future.value());
-      // Perform Action:
-      await controller.signOut();
-      // Assertions:
-      verify(authRepository.signOut).called(1);
-      expect(controller.state, const AsyncData<void>(null));
-    });
+    test(
+      'singnOut success',
+      () async {
+        // Setup Mocks:
+        final authRepository = MockAuthRepository();
+        final controller = AccountScreenController(authRepository);
+        // Define Behavior:
+        when(authRepository.signOut).thenAnswer((_) => Future.value());
+        // as this uses a stream , we need to listen to the stream to get the state changes before performing the action
+        expectLater(
+          controller.stream,
+          emitsInOrder(const [
+            AsyncLoading<void>(),
+            AsyncData<void>(null),
+          ]),
+        );
+        // Perform Action:
+        await controller.signOut();
+        // Assertions:
+        verify(authRepository.signOut).called(1);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
 
-    test('singnOut Failure', () async {
-      // Setup Mocks:
-      final authRepository = MockAuthRepository();
-      final controller = AccountScreenController(authRepository);
-      final exception = Exception('Connection failed');
-      // Define Behavior:
-      when(authRepository.signOut).thenThrow(exception);
-      // Perform Action:
-      await controller.signOut();
-      // Assertions:
-      verify(authRepository.signOut).called(1);
-      // expect(controller.state.hasError, true);
-      expect(controller.state, isA<AsyncError>());
-    });
+    test(
+      'singnOut Failure',
+      () async {
+        // Setup Mocks:
+        final authRepository = MockAuthRepository();
+        final controller = AccountScreenController(authRepository);
+        final exception = Exception('Connection failed');
+        // Define Behavior:
+        when(authRepository.signOut).thenThrow(exception);
+        expectLater(
+          controller.stream,
+          emitsInOrder([
+            const AsyncLoading<void>(),
+            // Predicates give us fine grained control over the values we want to test
+            predicate<AsyncValue<void>>((state) {
+              expect(state.hasError, true);
+              return true;
+            }),
+          ]),
+        );
+        // Perform Action:
+        await controller.signOut();
+        // Assertions:
+        verify(authRepository.signOut).called(1);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
   });
 }
