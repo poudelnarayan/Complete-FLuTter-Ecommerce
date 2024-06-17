@@ -26,5 +26,20 @@ void main() {
       verify(authRepository.signOut).called(1);
       expect(controller.state, const AsyncData<void>(null));
     });
+
+    test('singnOut Failure', () async {
+      // Setup Mocks:
+      final authRepository = MockAuthRepository();
+      final controller = AccountScreenController(authRepository);
+      final exception = Exception('Connection failed');
+      // Define Behavior:
+      when(authRepository.signOut).thenThrow(exception);
+      // Perform Action:
+      await controller.signOut();
+      // Assertions:
+      verify(authRepository.signOut).called(1);
+      // expect(controller.state.hasError, true);
+      expect(controller.state, isA<AsyncError>());
+    });
   });
 }
