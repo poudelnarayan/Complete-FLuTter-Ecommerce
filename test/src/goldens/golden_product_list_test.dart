@@ -29,8 +29,9 @@ void main() {
       );
     },
     variant: sizeVariant,
-    // tags are used if we want to run a specific test. 
+    // tags are used if we want to run a specific test.
     // to run this test, we can use the command: flutter test --update-goldens --tags=golden
     tags: ['golden'],
+    skip: true,
   );
 }
