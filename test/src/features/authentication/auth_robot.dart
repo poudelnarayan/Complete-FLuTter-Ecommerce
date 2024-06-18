@@ -98,11 +98,15 @@ class AuthRobot {
         .pumpAndSettle(); // Ensure everything is settled after the widget is pumped
   }
 
-  Future<void> tapLogoutButton() async {
+  Future<void> tapLogoutButton({bool? pumpOnly}) async {
     final logoutButton = find.text('Logout');
     expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
-    await tester.pumpAndSettle();
+    if (pumpOnly != null) {
+      await tester.pump();
+    } else {
+      await tester.pumpAndSettle();
+    }
   }
 
   void expectLogoutDialogFound() {
@@ -123,12 +127,15 @@ class AuthRobot {
     expect(dialogTitle, findsNothing);
   }
 
-  Future<void> tapDialogLogoutButton() async {
+  Future<void> tapDialogLogoutButton({bool? pumpOnly}) async {
     final logoutButton = find.byKey(kDialogDefaultKey);
     expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
-    await tester
-        .pumpAndSettle(); // Ensure the dialog is dismissed and UI settles
+    if (pumpOnly != null) {
+      await tester.pump();
+    } else {
+      await tester.pumpAndSettle();
+    }
   }
 
   void expectErrorAlertFound() {

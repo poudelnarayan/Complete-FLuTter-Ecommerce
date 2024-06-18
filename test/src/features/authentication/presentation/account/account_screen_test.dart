@@ -19,9 +19,9 @@ void main() {
 
     await tester.runAsync(() async {
       await r.pumpAccountScreen();
-      await r.tapLogoutButton();
+      await r.tapLogoutButton(pumpOnly: true);
       r.expectLogoutDialogFound();
-      await r.tapDialogLogoutButton();
+      await r.tapDialogLogoutButton(pumpOnly: true);
       r.expectLogoutDialogNotFound();
       r.expectErrorAlertNotFound();
     });
@@ -59,7 +59,7 @@ void main() {
       await r.pumpAccountScreen(authRepository: authRepository);
       await r.tapLogoutButton();
       r.expectLogoutDialogFound();
-      await r.tapDialogLogoutButton();
+      await r.tapDialogLogoutButton(pumpOnly: true);
       r.expectCircularProgressIndicator();
     });
   });
