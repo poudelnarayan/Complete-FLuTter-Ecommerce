@@ -40,7 +40,7 @@ final goRouterProvider = Provider<GoRouter>(
           }
         } else {
           if (state.fullPath == '/account' || state.fullPath == '/orders') {
-            return '/signIn';
+            return '/';
           }
         }
         return null;
