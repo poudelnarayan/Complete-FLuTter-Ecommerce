@@ -12,6 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Simple account screen showing some user info and a logout button.
+const loadingKey = Key('loading');
+
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 
@@ -26,9 +28,7 @@ class AccountScreen extends ConsumerWidget {
     final state = ref.watch(accountScreenControllerProvider);
     return Scaffold(
       appBar: AppBar(
-        title: state.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Text('Account'.hardcoded),
+        title: Text('Account'.hardcoded),
         actions: [
           ActionTextButton(
             text: 'Logout'.hardcoded,
@@ -53,9 +53,14 @@ class AccountScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: const ResponsiveCenter(
-        padding: EdgeInsets.symmetric(horizontal: Sizes.p16),
-        child: UserDataTable(),
+      body: ResponsiveCenter(
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
+        child: state.isLoading
+            ? const Center(
+                key: loadingKey,
+                child: CircularProgressIndicator(),
+              )
+            : const UserDataTable(),
       ),
     );
   }
