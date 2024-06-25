@@ -10,6 +10,8 @@ class SembastCartRepository implements LocalCartRepository {
   final Database db;
   SembastCartRepository({required this.db});
 
+  final store = StoreRef.main();
+
   static Future<Database> createDatabase(String filename) async {
     if (!kIsWeb) {
       final appDocDir = await getApplicationDocumentsDirectory();
@@ -23,21 +25,32 @@ class SembastCartRepository implements LocalCartRepository {
     return SembastCartRepository(db: await createDatabase('cart.db'));
   }
 
+  static const cartItemsKey = 'cartItems';
+
   @override
-  Future<Cart> fetchCart() {
-    // TODO: implement fetchCart
-    throw UnimplementedError();
+  Future<Cart> fetchCart() async {
+    final cartJson = await store.record(cartItemsKey).get(db) as String?;
+    if (cartJson != null) {
+      return Cart.fromJson(cartJson);
+    } else {
+      return const Cart();
+    }
   }
 
   @override
   Future<void> setCart(Cart cart) {
-    // TODO: implement setCart
-    throw UnimplementedError();
+    return store.record(cartItemsKey).put(db, cart.toJson());
   }
 
   @override
   Stream<Cart> watchCart() {
-    // TODO: implement watchCart
-    throw UnimplementedError();
+    final record = store.record(cartItemsKey);
+    return record.onSnapshot(db).map((snapshot) {
+      if (snapshot != null) {
+        return Cart.fromJson(snapshot.value as String);
+      } else {
+        return const Cart();
+      }
+    });
   }
 }
