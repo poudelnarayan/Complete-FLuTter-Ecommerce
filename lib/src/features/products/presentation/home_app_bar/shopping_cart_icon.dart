@@ -14,9 +14,7 @@ class ShoppingCartIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cartValue = ref.watch(cartProvider);
-    final cartItemsCount =
-        cartValue.maybeWhen(data: (cart) => cart.items.length, orElse: () => 0);
+    final cartItemsCount = ref.watch(cartItemsCountProvider);
     return Stack(
       children: [
         Center(
