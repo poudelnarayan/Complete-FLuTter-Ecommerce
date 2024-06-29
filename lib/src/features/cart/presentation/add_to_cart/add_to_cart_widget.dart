@@ -40,9 +40,9 @@ class AddToCartWidget extends ConsumerWidget {
               maxQuantity: min(availableQuantity, 10),
               onChanged: state.isLoading
                   ? null
-                  : (quantity) => ref
+                  : (itemQuantity) => ref
                       .read(addtoCartControllerProvider.notifier)
-                      .updateQuantity(quantity),
+                      .updateQuantity(itemQuantity),
             ),
           ],
         ),
