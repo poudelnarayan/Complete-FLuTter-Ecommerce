@@ -21,7 +21,7 @@ class ShoppingCartScreenController extends StateNotifier<AsyncValue<void>> {
   }
 }
 
-final shooppinCartScreenControllerProvider =
+final shooppingCartScreenControllerProvider =
     StateNotifierProvider<ShoppingCartScreenController, AsyncValue<void>>(
         (ref) {
   return ShoppingCartScreenController(

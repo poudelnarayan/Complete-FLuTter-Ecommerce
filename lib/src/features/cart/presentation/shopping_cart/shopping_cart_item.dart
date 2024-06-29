@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/shimmers.dart';
+import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen_controller.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
@@ -70,13 +71,13 @@ class ShoppingCartItemContents extends StatelessWidget {
   final bool isEditable;
 
   // * Keys for testing using find.byKey()
-  static Key deleteKey(int index) => Key('delete-$index');
 
   @override
   Widget build(BuildContext context) {
     // TODO: error handling
     // TODO: Inject formatter
     final priceFormatted = NumberFormat.simpleCurrency().format(product.price);
+
     return ResponsiveTwoColumnLayout(
       startFlex: 1,
       endFlex: 2,
@@ -93,28 +94,10 @@ class ShoppingCartItemContents extends StatelessWidget {
           gapH24,
           isEditable
               // show the quantity selector and a delete button
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ItemQuantitySelector(
-                      quantity: item.quantity,
-                      maxQuantity: min(product.availableQuantity, 10),
-                      itemIndex: itemIndex,
-                      // TODO: Implement onChanged
-                      onChanged: (value) {
-                        showNotImplementedAlertDialog(context: context);
-                      },
-                    ),
-                    IconButton(
-                      key: deleteKey(itemIndex),
-                      icon: Icon(Icons.delete, color: Colors.red[700]),
-                      // TODO: Implement onPressed
-                      onPressed: () {
-                        showNotImplementedAlertDialog(context: context);
-                      },
-                    ),
-                    const Spacer(),
-                  ],
+              ? EditOrRemoveItemWidget(
+                  item: item,
+                  product: product,
+                  itemIndex: itemIndex,
                 )
               // else, show the quantity as a read-only label
               : Padding(
@@ -125,6 +108,51 @@ class ShoppingCartItemContents extends StatelessWidget {
                 ),
         ],
       ),
+    );
+  }
+}
+
+class EditOrRemoveItemWidget extends ConsumerWidget {
+  const EditOrRemoveItemWidget({
+    super.key,
+    required this.item,
+    required this.product,
+    required this.itemIndex,
+  });
+
+  final Item item;
+  final Product product;
+  final int itemIndex;
+
+  static Key deleteKey(int index) => Key('delete-$index');
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(shooppingCartScreenControllerProvider);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ItemQuantitySelector(
+          quantity: item.quantity,
+          maxQuantity: min(product.availableQuantity, 10),
+          itemIndex: itemIndex,
+          onChanged: state.isLoading
+              ? null
+              : (quantity) => ref
+                  .read(shooppingCartScreenControllerProvider.notifier)
+                  .updateItemQuantity(product.id, quantity),
+        ),
+        IconButton(
+          key: deleteKey(itemIndex),
+          icon: Icon(Icons.delete, color: Colors.red[700]),
+          onPressed: state.isLoading
+              ? null
+              : () => ref
+                  .read(shooppingCartScreenControllerProvider.notifier)
+                  .removeItemById(product.id),
+        ),
+        const Spacer(),
+      ],
     );
   }
 }
