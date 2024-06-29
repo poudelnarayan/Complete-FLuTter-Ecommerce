@@ -47,6 +47,7 @@ class CartSyncService {
         // write the updated remote cart data to the repository
         await remoteCartRepository.setCart(uid, updatedRemoteCart);
         // Remove all items from the local cart
+        await localCartRepository.setCart(const Cart());
       }
     } catch (e) {
       print('Error: $e');

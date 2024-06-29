@@ -16,12 +16,12 @@ void main() {
     registerFallbackValue(const Cart());
   });
   late MockAuthRepository authRepository;
-  late MockRemoteCarRepository remoteCartRepository;
+  late MockRemoteCartRepository remoteCartRepository;
   late MockLocalCartRepository localCartRepository;
 
   setUp(() {
     authRepository = MockAuthRepository();
-    remoteCartRepository = MockRemoteCarRepository();
+    remoteCartRepository = MockRemoteCartRepository();
     localCartRepository = MockLocalCartRepository();
   });
 
