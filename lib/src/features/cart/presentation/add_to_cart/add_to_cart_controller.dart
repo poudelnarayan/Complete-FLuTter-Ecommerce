@@ -28,9 +28,14 @@ class AddToCartController extends StateNotifier<AsyncValue<int>> {
   }
 }
 
-// TODO: shoiuld this use autoDispose?
+/// withoutDispose:
+/// controller is not disposed when we nevigate back
+/// still alive(with previous state) when we open different page
+/// so it shows the same quantity as previous when we navigate to different page
+/// so the controller must be disposed
 final addtoCartControllerProvider =
-    StateNotifierProvider<AddToCartController, AsyncValue<int>>((ref) {
+    StateNotifierProvider.autoDispose<AddToCartController, AsyncValue<int>>(
+        (ref) {
   return AddToCartController(
     cartService: ref.watch(cartServiceProvider),
   );
