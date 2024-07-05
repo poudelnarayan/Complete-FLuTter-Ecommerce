@@ -14,39 +14,36 @@ class LeaveReviewController extends StateNotifier<AsyncValue<void>> {
   final DateTime Function() currentDateBuilder;
 
   Future<void> submitReview({
+    Review? previousReview,
     required ProductID productId,
     required double rating,
     required String comment,
     required void Function() onSuccess,
   }) async {
-    final review = Review(
-      rating: rating,
-      comment: comment,
-      date: currentDateBuilder(),
-    );
-    state = const AsyncLoading();
-    /* 
-    Another issue is that if we submit a review and close the page before the operation has completed, we get this error:
+    // * only submit the review if it's different from the previous one
+    if (previousReview == null ||
+        rating != previousReview.rating ||
+        comment != previousReview.comment) {
+      final review = Review(
+        rating: rating,
+        comment: comment,
+        date: currentDateBuilder(),
+      );
+      state = const AsyncLoading();
 
-    StateError (Bad state: Tried to use LeaveReviewController after `dispose` was called.)
- 
-    Consider checking `mounted`.
-    This can be fixed by checking the mounted property in the LeaveReviewController:
-    */
-    // state = await AsyncValue.guard(() async {
-    //   await reviewService.submitReview(productId: productId, review: review);
-    // });
+      final newState = await AsyncValue.guard(() async {
+        await reviewService.submitReview(productId: productId, review: review);
+      });
 
-    final newState = await AsyncValue.guard(() async {
-      await reviewService.submitReview(productId: productId, review: review);
-    });
-
-    if (mounted) {
-      // * only set the state if the controller hasn't been disposed
-      state = newState;
-      if (state.hasError == false) {
-        onSuccess();
+      if (mounted) {
+        // * only set the state if the controller hasn't been disposed
+        state = newState;
+        if (state.hasError == false) {
+          onSuccess();
+        }
       }
+    } else {
+      onSuccess();
     }
   }
 }
