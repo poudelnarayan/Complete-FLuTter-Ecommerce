@@ -4,36 +4,37 @@ import 'dart:convert';
 /// Product review data
 class Review {
   const Review({
-    required this.score,
+    required this.rating,
     required this.comment,
     required this.date,
   });
-  final double score; // from 1 to 5
+  final double rating; // from 1 to 5
   final String comment;
   final DateTime date;
 
   @override
-  String toString() => 'Review(score: $score, comment: $comment, date: $date)';
+  String toString() =>
+      'Review(rating: $rating, comment: $comment, date: $date)';
 
   @override
   bool operator ==(covariant Review other) {
     if (identical(this, other)) return true;
 
-    return other.score == score &&
+    return other.rating == rating &&
         other.comment == comment &&
         other.date == date;
   }
 
   @override
-  int get hashCode => score.hashCode ^ comment.hashCode ^ date.hashCode;
+  int get hashCode => rating.hashCode ^ comment.hashCode ^ date.hashCode;
 
   Review copyWith({
-    double? score,
+    double? rating,
     String? comment,
     DateTime? date,
   }) {
     return Review(
-      score: score ?? this.score,
+      rating: rating ?? this.rating,
       comment: comment ?? this.comment,
       date: date ?? this.date,
     );
@@ -41,7 +42,7 @@ class Review {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'score': score,
+      'rating': rating,
       'comment': comment,
       'date': date.millisecondsSinceEpoch,
     };
@@ -49,7 +50,7 @@ class Review {
 
   factory Review.fromMap(Map<String, dynamic> map) {
     return Review(
-      score: map['score'] as double,
+      rating: map['rating'] as double,
       comment: map['comment'] as String,
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
     );
