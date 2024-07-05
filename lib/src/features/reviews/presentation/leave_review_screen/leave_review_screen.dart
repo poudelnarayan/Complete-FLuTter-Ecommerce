@@ -21,8 +21,6 @@ class LeaveReviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Read from data source
-    const review = null;
     return Scaffold(
         appBar: AppBar(
           title: Text('Leave a review'.hardcoded),
