@@ -35,12 +35,10 @@ class ProductCard extends ConsumerWidget {
               gapH8,
               Text(product.title,
                   style: Theme.of(context).textTheme.titleLarge),
-              if (product.numRatings >= 1) ...[
-                gapH8,
-                ProductAverageRating(
-                  productId: product.id,
-                ),
-              ],
+              gapH8,
+              ProductAverageRating(
+                productId: product.id,
+              ),
               gapH24,
               Text(priceFormatted,
                   style: Theme.of(context).textTheme.headlineSmall),
