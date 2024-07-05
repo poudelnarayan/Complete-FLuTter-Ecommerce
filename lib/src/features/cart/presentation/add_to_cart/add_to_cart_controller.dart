@@ -12,7 +12,7 @@ class AddToCartController extends StateNotifier<AsyncValue<int>> {
     state = AsyncData(quantity);
   }
 
-  Future<void> additem(ProductID productId) async {
+  Future<void> addItem(ProductID productId) async {
     final item = Item(productId: productId, quantity: state.value!);
     // If we use only  AsyncLoading , then we no longer have a way to keep track of the state because
     // AsyncLoading doesnt carry any information about the previous  state.

@@ -70,6 +70,7 @@ class ShoppingCartItemContents extends StatelessWidget {
   final bool isEditable;
 
   // * Keys for testing using find.byKey()
+  static Key deleteKey(int index) => Key('delete-$index');
 
   @override
   Widget build(BuildContext context) {

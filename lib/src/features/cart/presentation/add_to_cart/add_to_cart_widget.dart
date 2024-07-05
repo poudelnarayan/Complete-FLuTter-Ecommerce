@@ -55,7 +55,7 @@ class AddToCartWidget extends ConsumerWidget {
           onPressed: availableQuantity > 0
               ? () => ref
                   .read(addtoCartControllerProvider.notifier)
-                  .additem(product.id)
+                  .addItem(product.id)
               : null,
           text: availableQuantity > 0
               ? 'Add to Cart'.hardcoded
