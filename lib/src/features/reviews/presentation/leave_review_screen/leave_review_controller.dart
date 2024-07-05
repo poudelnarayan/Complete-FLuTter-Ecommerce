@@ -24,9 +24,26 @@ class LeaveReviewController extends StateNotifier<AsyncValue<void>> {
       date: currentDateBuilder(),
     );
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    /* 
+    Another issue is that if we submit a review and close the page before the operation has completed, we get this error:
+
+    StateError (Bad state: Tried to use LeaveReviewController after `dispose` was called.)
+ 
+    Consider checking `mounted`.
+    This can be fixed by checking the mounted property in the LeaveReviewController:
+    */
+    // state = await AsyncValue.guard(() async {
+    //   await reviewService.submitReview(productId: productId, review: review);
+    // });
+
+    final newState = await AsyncValue.guard(() async {
       await reviewService.submitReview(productId: productId, review: review);
     });
+
+    if (mounted) {
+      // * only set the state if the controller hasn't been disposed
+      state = newState;
+    }
   }
 }
 
