@@ -29,6 +29,22 @@ class FakeProductsRepository {
     return _products.stream;
   }
 
+  /// Search for products where the title contains the search query
+  Future<List<Product>> searchProducts(String query) async {
+    assert(
+      _products.value.length <= 100,
+      'Client-side search should only be performed if the number of products is small. '
+      'Consider doing server-side search for larger datasets.',
+    );
+    // Get all products
+    final productsList = await fetchProductsList();
+    // Match all products where the title contains the query
+    return productsList
+        .where((product) =>
+            product.title.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
   Stream<Product?> watchProductById(String id) {
     return watchProductsList().map((products) {
       return _getProduct(products, id);
