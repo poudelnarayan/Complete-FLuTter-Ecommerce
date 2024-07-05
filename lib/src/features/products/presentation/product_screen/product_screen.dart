@@ -61,8 +61,8 @@ class ProductDetails extends ConsumerWidget {
   final Product product;
 
   @override
-   Widget build(BuildContext context, WidgetRef ref) {
-   final priceFormatted =
+  Widget build(BuildContext context, WidgetRef ref) {
+    final priceFormatted =
         ref.watch(currencyFormatterProvider).format(product.price);
     return ResponsiveTwoColumnLayout(
       startContent: Card(
@@ -85,7 +85,9 @@ class ProductDetails extends ConsumerWidget {
               // Only show average if there is at least one rating
               if (product.numRatings >= 1) ...[
                 gapH8,
-                ProductAverageRating(product: product),
+                ProductAverageRating(
+                  productId: product.id,
+                ),
               ],
               gapH8,
               const Divider(),
