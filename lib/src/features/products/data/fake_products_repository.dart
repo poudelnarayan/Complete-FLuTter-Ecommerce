@@ -97,3 +97,9 @@ final productProvider =
   final productRepository = ref.watch(productsRepositoryProvider);
   return productRepository.watchProductById(id);
 });
+
+final productsListSearchProvider = FutureProvider.autoDispose
+    .family<List<Product>, String>((ref, query) async {
+  final productsRepository = ref.watch(productsRepositoryProvider);
+  return productsRepository.searchProducts(query);
+});
